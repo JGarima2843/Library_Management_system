@@ -80,7 +80,7 @@ void librarian::student()
      
      cin>>choice;
 
-    /* if(choice==1)
+     if(choice==1)
      {
          view_booklist();
      }
@@ -95,7 +95,7 @@ void librarian::student()
      else 
      {
          exit(0);
-     }*/
+     }
 }
 
 void librarian::admin()
