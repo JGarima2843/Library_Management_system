@@ -12,12 +12,15 @@ class librarian
      void welcome();
      void view_booklist();
      void search_book();
-     void modify_details();
+     void add_book();
      void issue_book();
      void change_password();
      void student();
      void admin();
      void search_serial();
+     void search_bookname();
+     void search_subject();
+     void search_author();
 
 };
 
@@ -148,7 +151,7 @@ void librarian::admin()
 
      cout<<" \n\n\n PRESS  1  to   VIEW  THE  BOOKLIST  \n\n";
      cout<<" PRESS  2  TO   SEARCH   A   BOOK  \n\n";
-     cout<<" PRESS  3  TO   MODIFY  THE   DETAILS   OF  A   BOOK  \n\n";
+     cout<<" PRESS  3  TO   ADD  THE    BOOK  \n\n";
      cout<<" PRESS  4  TO  ISSUE  A  BOOK \n\n";
      cout<<" PRESS  5  TO  CHANGE  THE  PASSWORD  \n\n";
      cout<<" PRESS  6  TO  GO  TO  THE  MAIN  MENU \n\n ";
@@ -165,7 +168,7 @@ void librarian::admin()
      }
      else if(choice==3)
      {
-        modify_details();
+        add_book();
      }
      /*else if(choice==4)
      {
@@ -206,14 +209,14 @@ void librarian::admin()
 void librarian :: view_booklist()
 {
     system("cls");
-    system("COLOR 70");
-    cout<<"\n  S.NO.                      BOOK-NAME                            AUTHOR-NAME                          SUBJECT    \n";
-    for(int i=0;i<120;i++)
+    system("COLOR 7F");
+    cout<<"\n  S.NO.                      BOOK-NAME                            AUTHOR-NAME                          SUBJECT                    available copies"<<endl<<endl ;
+    for(int i=0;i<150;i++)
     {
         cout<<"-";
     }
     fstream inf ;
-    inf.open("booklist.dat" ,ios::in);
+    inf.open("booklist.dat" ,ios::in|ios::binary);
     if(!inf)
     {
         cout<<endl<<" error  occured  in opening the booklist file  ";
@@ -224,13 +227,13 @@ void librarian :: view_booklist()
         inf.read((char*)&book,sizeof(book));
         
         //cout<<"loop";
-        cout<< book.serial_num<<"                             "<<book.bookname<<"                                "<<book.author<<"                               "<<book.subject<<endl;   
+        cout<<"\n\n"<< book.serial_num<<"                         "<<book.bookname<<"                                "<<book.author<<"                               "<<book.subject<<"                  "<<book.available<<endl;   
     }
 
     inf.close();
     
 }
-void librarian::modify_details()
+void librarian::add_book()
 {
     int i ;
 
@@ -238,11 +241,19 @@ void librarian::modify_details()
     system("COLOR 30");
 
     fstream file ;
+    file.open("booklist.dat",ios::app);
+    while(1)
+    {
+        cout<<" enter 1  to continue modify and 0 to exit  "<<endl;
+            cin>>i;
+            if(i==0)
+            {
+            
+                file.close();
+                break ;
+            }
 
     
-
-    cout<<"  \n\n press 1 to modify and 0 to exit from modification mode "<<endl;
-    cin>>i;
 
     cout<<"\n\n enter  the  serial  number :"<<endl ;
     cin>>book.serial_num;
@@ -259,11 +270,12 @@ void librarian::modify_details()
     cout<<"\n\n enter the  subject of the book :"<<endl ;
     cin>>book.subject;
 
-
-    file.open("booklist.dat",ios::app);
+    cout<<"\n\n enter  the  available  books    in  library :"<<endl ;
+    cin>>book.available;
 
 
     file.write((char*)&book,sizeof(book));
+    } 
    
 
 }
@@ -287,7 +299,7 @@ void librarian :: search_book()
         case 1:
         search_serial();
         break ;
-        /*case 2 :
+        case 2 :
         search_bookname();
         break ;
         case 3 :
@@ -295,7 +307,7 @@ void librarian :: search_book()
         break ;
         case 4 :
         search_author();
-        break ;*/
+        break ;
         case 5 :
         exit(0);
         break ;
@@ -304,6 +316,7 @@ void librarian :: search_book()
 }
 void librarian :: search_serial()
 {
+    int found ;
     system("cls");
     ifstream inf ;
     int serial ;
@@ -320,19 +333,117 @@ void librarian :: search_serial()
             cout<<"BOOKNAME IS : "<<ends<<book.bookname<<endl ;
             cout<<"PREFERRED  STREAM : "<<ends<<book.subject<<endl;
             cout<<"AUTHOR  NAME  : "<<ends<<book.author<<endl ;
+            found=1;
+            break ;
 
         }
 
         else
         {
-            cout<<"\n no book present of this kind "<<endl;
-            break ;
+            found=0;
+            continue;
         }
+    }
+
+    if(found==0)
+    {
+        cout<<" book not present \n";
     }
     
 
 }
+void librarian::search_bookname()
+{
+    int found ;
+    system("cls");
+    ifstream inf ;
+    string name ;
+    cout<<" enter the book name  you want to serach : "<<endl ;
+    cin>>name ;
+    inf.open("booklist.dat");
+    while(!inf.eof())
+    {
+        inf.read((char*)&book,sizeof(book));
+        if(book.bookname==name)
+        {
+            cout<<"\n\n\n";
+            cout<<"SERIAL NUMBER : "<<ends<<book.serial_num<<endl ;
+            cout<<"BOOKNAME IS : "<<ends<<book.bookname<<endl ;
+            cout<<"PREFERRED  STREAM : "<<ends<<book.subject<<endl;
+            cout<<"AUTHOR  NAME  : "<<ends<<book.author<<endl ;
+            found=1;
+            break ;
 
+        }
+
+        else
+        {
+            found=0;
+            continue;
+        }
+    }
+
+    if(found==0)
+    {
+        cout<<" book not present \n";
+    }
+}
+
+void librarian :: search_subject()
+{
+    int found ;
+    system("cls");
+    ifstream inf ;
+    string stream ;
+    cout<<" enter the stream  you want to serach : "<<endl ;
+    cin>>stream ;
+    inf.open("booklist.dat");
+    while(!inf.eof())
+    {
+        inf.read((char*)&book,sizeof(book));
+        if(book.subject==stream)
+        {
+            cout<<"\n\n\n";
+            cout<<"SERIAL NUMBER : "<<ends<<book.serial_num<<endl ;
+            cout<<"BOOKNAME IS : "<<ends<<book.bookname<<endl ;
+            cout<<"PREFERRED  STREAM : "<<ends<<book.subject<<endl;
+            cout<<"AUTHOR  NAME  : "<<ends<<book.author<<endl ;
+
+        }
+
+        else
+        {
+            continue;
+        }
+    }   
+
+}
+
+void librarian :: search_author()
+{
+    int found ;
+    system("cls");
+    ifstream inf ;
+    string name ;
+    cout<<" enter the book author name  you want to serach : "<<endl ;
+    cin>>name ;
+    inf.open("booklist.dat");
+    while(!inf.eof())
+    {
+        inf.read((char*)&book,sizeof(book));
+        if(book.author==name)
+        {
+            cout<<"\n\n\n";
+            cout<<"SERIAL NUMBER : "<<ends<<book.serial_num<<endl ;
+            cout<<"BOOKNAME IS : "<<ends<<book.bookname<<endl ;
+            cout<<"PREFERRED  STREAM : "<<ends<<book.subject<<endl;
+            cout<<"AUTHOR  NAME  : "<<ends<<book.author<<endl ;
+        
+
+        }
+
+    }
+}
 
 
 int main()

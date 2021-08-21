@@ -6,5 +6,5 @@ class booklist
     char  bookname[30] ;
     char subject[20] ;
     char author[30];
-
+    int available ;
 } book ;
