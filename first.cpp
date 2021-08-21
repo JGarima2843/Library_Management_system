@@ -17,6 +17,7 @@ class librarian
      void change_password();
      void student();
      void admin();
+     void search_serial();
 
 };
 
@@ -143,9 +144,9 @@ void librarian::admin()
    {
        system("cls");
 
-       system("COLOR 57");
+       system("COLOR F0");
 
-     cout<<" \n\n\nPRESS  1  to   VIEW  THE  BOOKLIST  \n\n";
+     cout<<" \n\n\n PRESS  1  to   VIEW  THE  BOOKLIST  \n\n";
      cout<<" PRESS  2  TO   SEARCH   A   BOOK  \n\n";
      cout<<" PRESS  3  TO   MODIFY  THE   DETAILS   OF  A   BOOK  \n\n";
      cout<<" PRESS  4  TO  ISSUE  A  BOOK \n\n";
@@ -158,10 +159,10 @@ void librarian::admin()
      {
         view_booklist();
      }
-     /*else if(choice==2)
+     else if(choice==2)
      {
         search_book();
-     }*/
+     }
      else if(choice==3)
      {
         modify_details();
@@ -173,14 +174,14 @@ void librarian::admin()
      else if(choice==5)
      {
         change_password();
-     }
+     }*/
      else if(choice==6)
      {
         welcome();
      }
      else{
         exit(0);
-     }*/
+     }
 
    }
    else 
@@ -264,6 +265,71 @@ void librarian::modify_details()
 
     file.write((char*)&book,sizeof(book));
    
+
+}
+
+void librarian :: search_book()
+{
+    int i ;
+    system("cls");
+    system("COLOR 9F");
+    cout<<"\n\n\n";
+    cout<<" PRESS  1   TO    SEARCH   A   BOOK   BY   SERIAL   NUMBER  \n"<<endl ;
+    cout<<" PRESS  2   TO    SEARCH   A   BOOK   BY   BOOKNAME  \n"<<endl ;
+    cout<<" PRESS  3   TO    SEARCH   A   BOOK   BY   SUBJECT   \n"<<endl ;
+    cout<<" PRESS  4   TO    SEARCH   A   BOOK   BY   AUTHOR NAME  \n"<<endl ;
+    cout<<" PRESS  5   TO    EXIT  \n"<<endl;
+    
+    cin>>i ;
+
+    switch(i)
+    {
+        case 1:
+        search_serial();
+        break ;
+        /*case 2 :
+        search_bookname();
+        break ;
+        case 3 :
+        search_subject();
+        break ;
+        case 4 :
+        search_author();
+        break ;*/
+        case 5 :
+        exit(0);
+        break ;
+    }
+
+}
+void librarian :: search_serial()
+{
+    system("cls");
+    ifstream inf ;
+    int serial ;
+    cout<<" enter the serial  number  you want to serach : "<<endl ;
+    cin>>serial ;
+    inf.open("booklist.dat");
+    while(!inf.eof())
+    {
+        inf.read((char*)&book,sizeof(book));
+        if(book.serial_num==serial)
+        {
+            cout<<"\n\n\n";
+            cout<<"SERIAL NUMBER : "<<ends<<book.serial_num<<endl ;
+            cout<<"BOOKNAME IS : "<<ends<<book.bookname<<endl ;
+            cout<<"PREFERRED  STREAM : "<<ends<<book.subject<<endl;
+            cout<<"AUTHOR  NAME  : "<<ends<<book.author<<endl ;
+
+        }
+
+        else
+        {
+            cout<<"\n no book present of this kind "<<endl;
+            break ;
+        }
+    }
+    
 
 }
 
